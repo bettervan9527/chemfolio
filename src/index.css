@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg-primary: #060b14;
+  --color-bg-secondary: #0a1025;
+  --color-bg-card: #0d1530;
+  --color-accent-cyan: #00e5ff;
+  --color-accent-orange: #ff6d00;
+  --color-accent-purple: #7c3aed;
+  --color-accent-green: #10b981;
+  --color-accent-gold: #f59e0b;
+  --color-text-primary: #e8edf5;
+  --color-text-secondary: #8892b0;
+  --color-text-muted: #5a6486;
+  --color-border: #1a2555;
+  --color-border-glow: rgba(0, 229, 255, 0.15);
+  --font-display: 'Space Grotesk', 'Noto Sans SC', sans-serif;
+  --font-body: 'Noto Sans SC', 'Space Grotesk', sans-serif;
+  --shadow-glow-cyan: 0 0 20px rgba(0, 229, 255, 0.15), 0 0 60px rgba(0, 229, 255, 0.05);
+  --shadow-glow-orange: 0 0 20px rgba(255, 109, 0, 0.15), 0 0 60px rgba(255, 109, 0, 0.05);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-cyan);
+}
+
+::selection {
+  background: rgba(0, 229, 255, 0.3);
+  color: var(--color-text-primary);
+}
+
+@layer components {
+  .glass-panel {
+    background: linear-gradient(135deg, rgba(13, 21, 48, 0.8), rgba(10, 16, 37, 0.6));
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+  }
+
+  .glow-border {
+    border: 1px solid var(--color-border-glow);
+    box-shadow: var(--shadow-glow-cyan);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .glow-border:hover {
+    border-color: rgba(0, 229, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.2), 0 0 80px rgba(0, 229, 255, 0.08);
+  }
+
+  .glow-border-orange {
+    border: 1px solid rgba(255, 109, 0, 0.15);
+    box-shadow: var(--shadow-glow-orange);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .glow-border-orange:hover {
+    border-color: rgba(255, 109, 0, 0.3);
+    box-shadow: 0 0 30px rgba(255, 109, 0, 0.2), 0 0 80px rgba(255, 109, 0, 0.08);
+  }
+
+  .text-gradient-cyan {
+    background: linear-gradient(135deg, #00e5ff, #00b8d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-fire {
+    background: linear-gradient(135deg, #ff6d00, #ff9100, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .hex-decoration {
+    width: 120px;
+    height: 120px;
+    border: 1px solid rgba(0, 229, 255, 0.1);
+    transform: rotate(30deg);
+    position: absolute;
+  }
+
+  .skill-bar-fill {
+    background: linear-gradient(90deg, #00e5ff, #00b8d4);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .bond-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
