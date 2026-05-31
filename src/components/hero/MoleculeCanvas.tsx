@@ -39,7 +39,7 @@ export function MoleculeCanvas() {
     }
 
     const initAtoms = () => {
-      const count = Math.max(8, Math.floor((width * height) / 60000))
+      const count = Math.max(12, Math.floor((width * height) / 40000))
       atomsRef.current = []
 
       for (let i = 0; i < count; i++) {
@@ -70,7 +70,7 @@ export function MoleculeCanvas() {
         }
 
         nearby.sort((a, b) => a.dist - b.dist)
-        const maxConn = Math.min(2, nearby.length)
+        const maxConn = Math.min(3, nearby.length)
         for (let k = 0; k < maxConn; k++) {
           atom.connections.push(nearby[k].index)
         }
@@ -173,7 +173,7 @@ export function MoleculeCanvas() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.6 }}
+      style={{ opacity: 0.8 }}
     />
   )
 }
