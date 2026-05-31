@@ -28,17 +28,18 @@ export function MoleculeCanvas() {
     let height = 0
     let mouseX = 0
     let mouseY = 0
+    let running = false
 
     const resize = () => {
       width = window.innerWidth
       height = window.innerHeight
       canvas.width = width
       canvas.height = height
-      initAtoms()
+      if (running) initAtoms()
     }
 
     const initAtoms = () => {
-      const count = Math.max(12, Math.floor((width * height) / 35000))
+      const count = Math.max(8, Math.floor((width * height) / 60000))
       atomsRef.current = []
 
       for (let i = 0; i < count; i++) {
@@ -58,19 +59,18 @@ export function MoleculeCanvas() {
         const atom = atomsRef.current[i]
         const nearby: { index: number; dist: number }[] = []
 
-        for (let j = 0; j < atomsRef.current.length; j++) {
-          if (i === j) continue
+        for (let j = i + 1; j < atomsRef.current.length; j++) {
           const other = atomsRef.current[j]
           const dx = atom.x - other.x
           const dy = atom.y - other.y
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < 160) {
+          const dist = dx * dx + dy * dy
+          if (dist < 25600) {
             nearby.push({ index: j, dist })
           }
         }
 
         nearby.sort((a, b) => a.dist - b.dist)
-        const maxConn = Math.min(3, nearby.length)
+        const maxConn = Math.min(2, nearby.length)
         for (let k = 0; k < maxConn; k++) {
           atom.connections.push(nearby[k].index)
         }
@@ -152,12 +152,17 @@ export function MoleculeCanvas() {
     }
 
     resize()
-    animate()
+    const startTimer = setTimeout(() => {
+      running = true
+      initAtoms()
+      animate()
+    }, 200)
 
     window.addEventListener('resize', resize)
     window.addEventListener('mousemove', handleMouse)
 
     return () => {
+      clearTimeout(startTimer)
       cancelAnimationFrame(animRef.current)
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', handleMouse)

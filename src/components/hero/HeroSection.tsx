@@ -21,6 +21,8 @@ export function HeroSection() {
               src="/touxiang.png"
               alt={profile.name}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent-cyan)]/10 to-transparent pointer-events-none" />
           </div>
