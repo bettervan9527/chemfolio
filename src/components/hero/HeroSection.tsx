@@ -18,7 +18,7 @@ export function HeroSection() {
         <div className="mb-8">
           <div className="w-32 h-32 mx-auto mb-6 rounded-full glass-panel glow-border flex items-center justify-center overflow-hidden relative">
             <img
-              src="/touxiang.png"
+              src="/touxiang.jpg"
               alt={profile.name}
               className="w-full h-full object-cover"
               loading="lazy"
