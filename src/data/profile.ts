@@ -29,6 +29,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：李备蓓',
       doi: undefined,
+      reportFile: '樊高运_2510150105_试剂级氯化钠的制备_李备蓓.pdf',
       abstract: '通过粗食盐的提纯制备试剂级氯化钠，依次经过溶解、过滤、沉淀、蒸发结晶等步骤，掌握了无机盐纯化的基本操作技术。'
     },
     {
@@ -37,6 +38,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：张超',
       doi: undefined,
+      reportFile: '樊高运_2510150105_天平的使用及溶液的配制_张超.pdf',
       abstract: '学习分析天平的规范使用方法，掌握标准溶液的配制与标定技术，为后续定量分析实验奠定基础。'
     },
     {
@@ -45,6 +47,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：张超',
       doi: undefined,
+      reportFile: '樊高运_2510150105_Fe³⁺、Al³⁺的分离_张超.pdf',
       abstract: '利用Fe³⁺和Al³⁺在碱性条件下沉淀行为的差异，通过控制pH值实现两种离子的有效分离与鉴定。'
     },
     {
@@ -53,6 +56,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：张超',
       doi: undefined,
+      reportFile: '樊高运_2510150105_CuCl的小量制备与性质_张超.pdf',
       abstract: '采用CuCl₂与铜粉在浓盐酸介质中反应制备氯化亚铜白色沉淀，观察其光敏性和空气中氧化变色现象。'
     },
     {
@@ -61,6 +65,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：张超',
       doi: undefined,
+      reportFile: '樊高运_2510150105_配合物的生成与性质_张超.pdf',
       abstract: '合成多种过渡金属配合物，通过颜色变化观察配体取代反应，探究配合物的稳定性及配体场效应。'
     },
     {
@@ -69,6 +74,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：张超',
       doi: undefined,
+      reportFile: '樊高运_2510150105_常见阳离子的分离与鉴定（一）_张超.pdf',
       abstract: '系统学习了常见阳离子的分组方案和系统分析法，通过特征反应对Ag⁺、Pb²⁺、Hg₂²⁺等第一组阳离子进行分离与鉴定。'
     },
     {
@@ -77,6 +83,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：张超',
       doi: undefined,
+      reportFile: '樊高运_2510150105_醋酸电离度和电离常数的测定_张超.pdf',
       abstract: '采用pH法测定不同浓度醋酸溶液的pH值，计算电离度α和电离平衡常数Ka，验证了弱电解质的电离平衡理论。'
     },
     {
@@ -85,6 +92,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：张超',
       doi: undefined,
+      reportFile: '樊高运_2510150105_硫酸铜晶体的制备_张超.pdf',
       abstract: '以氧化铜和稀硫酸为原料制备五水硫酸铜晶体，通过控制结晶条件获得了形态规整的蓝色透明晶体。'
     },
     {
@@ -93,6 +101,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：张超',
       doi: undefined,
+      reportFile: '樊高运_2510150105_醋酸亚铬（Ⅱ）水合物的制备_张超.pdf',
       abstract: '在无氧条件下利用Cr³⁺的锌还原法制备醋酸亚铬(Ⅱ)水合物红色晶体，掌握了惰性气氛保护下的合成操作技术。'
     },
     {
@@ -101,6 +110,7 @@ export const profile: Profile = {
       year: 2025,
       authors: '指导老师：李备蓓',
       doi: undefined,
+      reportFile: '樊高运_2510150105_氧化还原反应_李备蓓.pdf',
       abstract: '系统研究了一系列氧化还原反应，观察了KMnO₄在不同介质中的还原产物，掌握了电极电势与反应方向的关系。'
     },
     {
@@ -154,6 +164,7 @@ export const profile: Profile = {
       year: 2026,
       authors: '指导老师：伦会洁',
       doi: undefined,
+      reportFile: '樊高运_2510150105_溶剂热致变色Ni(II)配合物的固相合成及其热致变色现象 _王宾 .pdf',
       abstract: '通过固相研磨法合成Ni(II)配合物，系统研究其在不同溶剂和温度条件下的变色行为，探讨变色机理。'
     }
   ],
