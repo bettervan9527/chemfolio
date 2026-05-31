@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import { motion } from 'framer-motion'
+import { useGsapStagger } from '@/hooks/useGsapReveal'
 import {
   Beaker,
   Droplets,
@@ -54,6 +54,52 @@ function levelLabel(level: number): string {
   return '入门'
 }
 
+interface SkillBubblesProps {
+  skills: { name: string; level: number }[]
+  maxLevel: number
+}
+
+function SkillBubbles({ skills, maxLevel }: SkillBubblesProps) {
+  const containerRef = useGsapStagger(0.05, { scale: 0.8, opacity: 0 })
+
+  return (
+    <div ref={containerRef} className="flex flex-wrap gap-4 justify-center min-h-[120px] items-start py-4">
+      {skills.map((skill) => {
+        const size = 0.8 + (skill.level / maxLevel) * 0.8
+        return (
+          <div
+            key={skill.name}
+            className="flex flex-col items-center gap-2 group"
+          >
+            <div
+              className="relative glass-panel glow-border rounded-2xl flex flex-col items-center justify-center gap-1
+                cursor-default hover:shadow-[0_0_25px_rgba(0,229,255,0.2)] transition-all duration-300 p-4"
+              style={{
+                width: `${80 + size * 24}px`,
+                height: `${80 + size * 24}px`,
+              }}
+            >
+              <div className="absolute inset-0 rounded-2xl bg-[var(--color-accent-cyan)]/5 group-hover:bg-[var(--color-accent-cyan)]/10 transition-colors" />
+              <div className="relative z-10 text-[var(--color-accent-cyan)]">
+                {getSkillIcon(skill.name)}
+              </div>
+              <span
+                className="relative z-10 font-bold font-[family-name:var(--font-display)] text-[var(--color-accent-cyan)]"
+                style={{ fontSize: `${11 + size * 3}px` }}
+              >
+                {levelLabel(skill.level)}
+              </span>
+            </div>
+            <span className="text-xs text-[var(--color-text-muted)] group-hover:text-[var(--color-text-secondary)] transition-colors text-center leading-tight max-w-[90px]">
+              {skill.name}
+            </span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 interface SkillCloudProps {
   categories: SkillCategory[]
 }
@@ -85,44 +131,7 @@ export function SkillCloud({ categories }: SkillCloudProps) {
         ))}
       </div>
 
-      <div className="flex flex-wrap gap-4 justify-center min-h-[120px] items-start py-4">
-        {allSkills.map((skill, index) => {
-          const size = 0.8 + (skill.level / maxLevel) * 0.8
-          return (
-            <motion.div
-              key={skill.name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="flex flex-col items-center gap-2 group"
-            >
-              <div
-                className="relative glass-panel glow-border rounded-2xl flex flex-col items-center justify-center gap-1
-                  cursor-default hover:shadow-[0_0_25px_rgba(0,229,255,0.2)] transition-all duration-300 p-4"
-                style={{
-                  width: `${80 + size * 24}px`,
-                  height: `${80 + size * 24}px`,
-                }}
-              >
-                <div className="absolute inset-0 rounded-2xl bg-[var(--color-accent-cyan)]/5 group-hover:bg-[var(--color-accent-cyan)]/10 transition-colors" />
-                <div className="relative z-10 text-[var(--color-accent-cyan)]">
-                  {getSkillIcon(skill.name)}
-                </div>
-                <span
-                  className="relative z-10 font-bold font-[family-name:var(--font-display)] text-[var(--color-accent-cyan)]"
-                  style={{ fontSize: `${11 + size * 3}px` }}
-                >
-                  {levelLabel(skill.level)}
-                </span>
-              </div>
-              <span className="text-xs text-[var(--color-text-muted)] group-hover:text-[var(--color-text-secondary)] transition-colors text-center leading-tight max-w-[90px]">
-                {skill.name}
-              </span>
-            </motion.div>
-          )
-        })}
-      </div>
+      <SkillBubbles key={activeCategory} skills={allSkills} maxLevel={maxLevel} />
     </div>
   )
 }

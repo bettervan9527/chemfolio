@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { useGsapStagger } from '@/hooks/useGsapReveal'
 import { Atom, Beaker, FlaskConical, FlaskRound, BarChart3, Code } from 'lucide-react'
 import type { ReactNode } from 'react'
 
@@ -16,6 +16,8 @@ interface ResearchInterestProps {
 }
 
 export function ResearchInterest({ fields }: ResearchInterestProps) {
+  const containerRef = useGsapStagger(0.1, { y: 20, opacity: 0 })
+
   const getIcon = (field: string): ReactNode => {
     for (const [key, icon] of Object.entries(FIELD_ICONS)) {
       if (field.includes(key) || key.includes(field)) return icon
@@ -24,14 +26,10 @@ export function ResearchInterest({ fields }: ResearchInterestProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {fields.map((field, index) => (
-        <motion.div
+    <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {fields.map((field) => (
+        <div
           key={field}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.4, delay: index * 0.1 }}
           className="glass-panel glow-border p-6 group cursor-default"
         >
           <div className="flex items-start gap-4">
@@ -46,7 +44,7 @@ export function ResearchInterest({ fields }: ResearchInterestProps) {
               <div className="mt-2 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-[var(--color-accent-cyan)]/50 to-transparent transition-all duration-500" />
             </div>
           </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   )

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { useGsapReveal } from '@/hooks/useGsapReveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { PaperCard } from './PaperCard'
 import { profile } from '@/data/profile'
@@ -26,28 +26,34 @@ export function PublicationsSection() {
 
         <div className="space-y-12">
           {sortedYears.map((year) => (
-            <div key={year}>
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-4 mb-6"
-              >
-                <span className="text-2xl font-bold font-[family-name:var(--font-display)] text-gradient-fire">
-                  {year}
-                </span>
-                <div className="flex-1 h-px bg-gradient-to-r from-[var(--color-accent-orange)]/30 to-transparent" />
-              </motion.div>
-
-              <div className="space-y-4">
-                {publicationsByYear[year].map((paper, index) => (
-                  <PaperCard key={paper.title} paper={paper} index={index} />
-                ))}
-              </div>
-            </div>
+            <YearSection key={year} year={year} papers={publicationsByYear[year]} />
           ))}
         </div>
       </div>
     </section>
+  )
+}
+
+function YearSection({ year, papers }: { year: number; papers: typeof profile.publications }) {
+  const revealRef = useGsapReveal({ opacity: 0 })
+
+  return (
+    <div>
+      <div
+        ref={revealRef}
+        className="flex items-center gap-4 mb-6"
+      >
+        <span className="text-2xl font-bold font-[family-name:var(--font-display)] text-gradient-fire">
+          {year}
+        </span>
+        <div className="flex-1 h-px bg-gradient-to-r from-[var(--color-accent-orange)]/30 to-transparent" />
+      </div>
+
+      <div className="space-y-4">
+        {papers.map((paper, index) => (
+          <PaperCard key={paper.title} paper={paper} index={index} />
+        ))}
+      </div>
+    </div>
   )
 }

@@ -1,9 +1,64 @@
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
 import { ChevronDown } from 'lucide-react'
 import { MoleculeCanvas } from './MoleculeCanvas'
 import { profile } from '@/data/profile'
 
 export function HeroSection() {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const ctx = gsap.context(() => {
+      const children = el.children
+
+      const tl = gsap.timeline({ defaults: { ease: 'power2.out' } })
+
+      tl.fromTo(
+        children[0],
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8 },
+        0
+      )
+      tl.fromTo(
+        children[1],
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8 },
+        0.15
+      )
+      tl.fromTo(
+        children[2],
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8 },
+        0.3
+      )
+      tl.fromTo(
+        children[3],
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8 },
+        0.45
+      )
+      tl.fromTo(
+        children[4],
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8 },
+        0.6
+      )
+      tl.fromTo(
+        children[5],
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6 },
+        1.2
+      )
+    }, el)
+
+    return () => {
+      ctx.revert()
+    }
+  }, [])
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <MoleculeCanvas />
@@ -28,74 +83,49 @@ export function HeroSection() {
           </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-        >
-          <div className="flex items-center gap-3 mb-4 justify-center">
-            <div className="h-px w-12 bg-gradient-to-r from-transparent to-[var(--color-accent-cyan)]/30" />
-            <span className="text-sm text-[var(--color-accent-cyan)]/80 font-medium font-[family-name:var(--font-display)] tracking-widest uppercase">
-              Chemistry
-            </span>
-            <div className="h-px w-12 bg-gradient-to-l from-transparent to-[var(--color-accent-cyan)]/30" />
+        <div ref={containerRef}>
+          <div>
+            <div className="flex items-center gap-3 mb-4 justify-center">
+              <div className="h-px w-12 bg-gradient-to-r from-transparent to-[var(--color-accent-cyan)]/30" />
+              <span className="text-sm text-[var(--color-accent-cyan)]/80 font-medium font-[family-name:var(--font-display)] tracking-widest uppercase">
+                Chemistry
+              </span>
+              <div className="h-px w-12 bg-gradient-to-l from-transparent to-[var(--color-accent-cyan)]/30" />
+            </div>
           </div>
-        </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.15, ease: 'easeOut' }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold font-[family-name:var(--font-display)] mb-4"
-        >
-          <span className="text-gradient-cyan">{profile.name}</span>
-        </motion.h1>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold font-[family-name:var(--font-display)] mb-4">
+            <span className="text-gradient-cyan">{profile.name}</span>
+          </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-          className="text-lg md:text-xl text-[var(--color-text-secondary)] mb-2 font-medium"
-        >
-          {profile.title}
-        </motion.p>
+          <p className="text-lg md:text-xl text-[var(--color-text-secondary)] mb-2 font-medium">
+            {profile.title}
+          </p>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.45, ease: 'easeOut' }}
-          className="text-sm md:text-base text-[var(--color-text-muted)] max-w-xl mb-10 leading-relaxed"
-        >
-          {profile.subtitle}
-        </motion.p>
+          <p className="text-sm md:text-base text-[var(--color-text-muted)] max-w-xl mb-10 leading-relaxed">
+            {profile.subtitle}
+          </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-wrap gap-3 justify-center mb-12"
-        >
-          {profile.researchFields.map((field, i) => (
-            <span
-              key={field}
-              className="px-4 py-1.5 text-xs font-medium rounded-full glass-panel text-[var(--color-accent-cyan)]
-                border-[var(--color-accent-cyan)]/20 shadow-[0_0_12px_rgba(0,229,255,0.08)] animate-fade-in-up"
-              style={{ animationDelay: `${0.7 + i * 0.1}s` }}
-            >
-              {field}
-            </span>
-          ))}
-        </motion.div>
+          <div className="flex flex-wrap gap-3 justify-center mb-12">
+            {profile.researchFields.map((field, i) => (
+              <span
+                key={field}
+                className="px-4 py-1.5 text-xs font-medium rounded-full glass-panel text-[var(--color-accent-cyan)]
+                  border-[var(--color-accent-cyan)]/20 shadow-[0_0_12px_rgba(0,229,255,0.08)] animate-fade-in-up"
+                style={{ animationDelay: `${0.7 + i * 0.1}s` }}
+              >
+                {field}
+              </span>
+            ))}
+          </div>
 
-        <motion.a
-          href="#about"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="text-[var(--color-text-muted)] hover:text-[var(--color-accent-cyan)] transition-colors cursor-pointer"
-        >
-          <ChevronDown className="w-6 h-6 animate-bounce" />
-        </motion.a>
+          <a
+            href="#about"
+            className="text-[var(--color-text-muted)] hover:text-[var(--color-accent-cyan)] transition-colors cursor-pointer"
+          >
+            <ChevronDown className="w-6 h-6 animate-bounce" />
+          </a>
+        </div>
       </div>
     </section>
   )

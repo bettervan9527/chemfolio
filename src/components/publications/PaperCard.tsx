@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { useGsapReveal } from '@/hooks/useGsapReveal'
 import { ExternalLink, FileText } from 'lucide-react'
 import type { Publication } from '@/types'
 
@@ -24,13 +24,11 @@ function getJournalColor(journal: string): string {
 export function PaperCard({ paper, index }: PaperCardProps) {
   const accentColor = getJournalColor(paper.journal)
   const reportPath = paper.reportFile ? `/Paper/${paper.reportFile}` : null
+  const cardRef = useGsapReveal({ x: -20, opacity: 0 })
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+    <div
+      ref={cardRef}
       className="glass-panel hover-scale group relative overflow-hidden"
     >
       <div
@@ -87,6 +85,6 @@ export function PaperCard({ paper, index }: PaperCardProps) {
           </p>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }

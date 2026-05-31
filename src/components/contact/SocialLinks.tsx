@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { useGsapStagger } from '@/hooks/useGsapReveal'
 import type { Social } from '@/types'
 import {
   GraduationCap,
@@ -23,21 +23,18 @@ interface SocialLinksProps {
 }
 
 export function SocialLinks({ social }: SocialLinksProps) {
+  const containerRef = useGsapStagger(0.1, { scale: 0.8, opacity: 0 })
+
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-      {social.map((item, index) => (
-        <motion.a
+    <div ref={containerRef} className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      {social.map((item) => (
+        <a
           key={item.platform}
           href={item.url}
           target="_blank"
           rel="noopener noreferrer"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.3, delay: index * 0.1 }}
-          whileHover={{ scale: 1.05, rotate: 2 }}
           className="glass-panel glow-border p-4 flex flex-col items-center gap-2 group cursor-pointer
-            hover:shadow-[0_0_25px_rgba(0,229,255,0.15)]"
+            hover:shadow-[0_0_25px_rgba(0,229,255,0.15)] hover:scale-105 transition-transform duration-300"
         >
           <div className="text-[var(--color-accent-cyan)] group-hover:text-[var(--color-accent-cyan)] transition-colors">
             {ICON_MAP[item.icon] || <ExternalLink className="w-5 h-5" />}
@@ -45,7 +42,7 @@ export function SocialLinks({ social }: SocialLinksProps) {
           <span className="text-xs text-[var(--color-text-muted)] group-hover:text-[var(--color-text-secondary)] transition-colors">
             {item.platform}
           </span>
-        </motion.a>
+        </a>
       ))}
     </div>
   )
