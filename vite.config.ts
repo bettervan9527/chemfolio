@@ -5,7 +5,17 @@ import tsconfigPaths from "vite-tsconfig-paths";
 // https://vite.dev/config/
 export default defineConfig({
   build: {
-    sourcemap: 'hidden',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          gsap: ['gsap'],
+          router: ['react-router-dom'],
+          zustand: ['zustand'],
+        },
+      },
+    },
   },
   plugins: [
     react({
