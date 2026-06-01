@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react'
-import { useGsapStagger } from '@/hooks/useGsapReveal'
+import { useState, type ReactNode, useRef } from 'react'
+import { gsap } from 'gsap'
 import {
   Beaker,
   Droplets,
@@ -60,7 +60,9 @@ interface SkillCloudProps {
 
 export function SkillCloud({ categories }: SkillCloudProps) {
   const [activeCategory, setActiveCategory] = useState(categories[0]?.category || '')
-  const staggerRef = useGsapStagger(0.05)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
   const allSkills = categories
     .find((c) => c.category === activeCategory)
@@ -68,30 +70,78 @@ export function SkillCloud({ categories }: SkillCloudProps) {
 
   const maxLevel = Math.max(...allSkills.map((s) => s.level), 1)
 
+  const handleCategoryChange = (newCategory: string) => {
+    if (isAnimating || activeCategory === newCategory) return
+    
+    setIsAnimating(true)
+    const itemsArray = Array.from(itemRefs.current.values())
+    
+    gsap.to(itemsArray, {
+      opacity: 0,
+      scale: 0.7,
+      y: 15,
+      x: -10,
+      duration: 0.15,
+      stagger: { amount: 0.08, from: 'random' },
+      ease: 'power2.in',
+      onComplete: () => {
+        setActiveCategory(newCategory)
+        requestAnimationFrame(() => {
+          const newItems = containerRef.current?.querySelectorAll('[data-skill-item]')
+          if (newItems) {
+            gsap.set(newItems, { opacity: 0, scale: 0.7, y: 15, x: 10 })
+            gsap.to(newItems, {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              x: 0,
+              duration: 0.18,
+              stagger: { amount: 0.06, from: 'random' },
+              ease: 'power2.out',
+              onComplete: () => {
+                setIsAnimating(false)
+              },
+            })
+          }
+        })
+      },
+    })
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-2 justify-center">
         {categories.map((cat) => (
           <button
             key={cat.category}
-            onClick={() => setActiveCategory(cat.category)}
+            onClick={() => handleCategoryChange(cat.category)}
+            disabled={isAnimating}
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 cursor-pointer
               ${activeCategory === cat.category
                 ? 'bg-[var(--color-accent-cyan)]/15 text-[var(--color-accent-cyan)] border border-[var(--color-accent-cyan)]/30 shadow-[0_0_12px_rgba(0,229,255,0.1)]'
                 : 'bg-white/[0.02] text-[var(--color-text-muted)] border border-transparent hover:text-[var(--color-text-secondary)] hover:bg-white/[0.04)]'
-              }`}
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {cat.category}
           </button>
         ))}
       </div>
 
-      <div ref={staggerRef} className="flex flex-wrap gap-4 justify-center min-h-[120px] items-start py-4">
-        {allSkills.map((skill, index) => {
+      <div 
+        ref={(el) => {
+          if (el) containerRef.current = el as HTMLDivElement
+        }} 
+        className="flex flex-wrap gap-4 justify-center min-h-[120px] items-start py-4"
+      >
+        {allSkills.map((skill) => {
           const size = 0.8 + (skill.level / maxLevel) * 0.8
           return (
             <div
               key={skill.name}
+              data-skill-item
+              ref={(el) => {
+                if (el) itemRefs.current.set(skill.name, el as HTMLDivElement)
+              }}
               className="flex flex-col items-center gap-2 group"
             >
               <div

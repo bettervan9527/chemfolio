@@ -273,31 +273,30 @@ export const profile: Profile = {
         { name: '无机合成', level: 82 },
         { name: '滴定分析', level: 80 },
         { name: '重结晶纯化', level: 78 },
-        { name: '电化学实验', level: 75 },
+        { name: '电化学实验', level: 74 },
         { name: '固相合成', level: 72 },
-        { name: '配合物合成', level: 76 },
+        { name: '配合物合成', level: 83 },
       ]
     },
     {
       category: '仪器操作',
       items: [
-        { name: '紫外-可见光谱仪', level: 75 },
+        { name: '紫外-可见光谱仪', level: 78 },
         { name: '电子天平', level: 90 },
-        { name: 'pH计', level: 85 },
-        { name: '电化学工作站', level: 70 },
-        { name: '荧光光谱仪', level: 68 },
+        { name: 'pH计', level: 86 },
+        { name: '电化学工作站', level: 72 },
+        { name: '荧光光谱仪', level: 70 },
       ]
     },
     {
       category: '软件与数据分析',
       items: [
-        { name: 'Python', level: 72 },
-        { name: 'SPSS', level: 80 },
-        { name: 'MATLAB', level: 75 },
+        { name: 'Python', level: 74 },
+        { name: 'MATLAB', level: 80 },
+        { name: 'SPSS', level: 75 },
         { name: 'Draw.io', level: 85 },
-        { name: 'Origin', level: 70 },
-        { name: 'Excel 数据分析', level: 82 },
-        { name: 'ChemDraw', level: 72 },
+        { name: 'Origin', level: 72 },
+        { name: 'MolView', level: 74 },
       ]
     }
   ],
@@ -314,12 +313,12 @@ export const profile: Profile = {
     },
     {
       platform: 'ResearchGate',
-      url: 'https://www.researchgate.net/profile/fangaoyun',
+      url: '',
       icon: 'flask-conical'
     },
     {
       platform: 'ORCID',
-      url: 'https://orcid.org/0000-0000-0000-0000',
+      url: '',
       icon: 'graduation-cap'
     }
   ]

@@ -1,8 +1,10 @@
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Sun, Moon } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
 import { useScrollSpy } from '@/hooks/useScrollSpy'
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
+import { useTheme } from '@/hooks/useTheme'
+import { forceLoadSection } from '@/components/ui/lazyLoadUtils'
 
 const NAV_ITEMS = [
   { id: 'hero', label: '首页' },
@@ -14,10 +16,11 @@ const NAV_ITEMS = [
 
 export function Navbar() {
   const { activeSection, isMenuOpen, toggleMenu, closeMenu } = useAppStore()
+  const { theme, toggleTheme } = useTheme()
   useScrollSpy()
   const navItemsRef = useRef<Map<string, HTMLElement>>(new Map())
   const indicatorRef = useRef<HTMLDivElement>(null)
-  const prevActiveRef = useRef<string>('hero')
+  const initialized = useRef(false)
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -31,7 +34,7 @@ export function Navbar() {
   }, [isMenuOpen])
 
   useEffect(() => {
-    if (!indicatorRef.current) return
+    if (!indicatorRef.current || initialized.current) return
 
     const activeItem = navItemsRef.current.get(activeSection)
     if (activeItem) {
@@ -39,22 +42,56 @@ export function Navbar() {
       const parentRect = activeItem.parentElement?.getBoundingClientRect()
       if (parentRect) {
         const left = rect.left - parentRect.left + rect.width / 2 - 24
-        gsap.to(indicatorRef.current, {
-          left,
-          duration: 0.4,
-          ease: 'power2.out',
-        })
+        gsap.set(indicatorRef.current, { left, width: 48 })
+        initialized.current = true
       }
     }
-    prevActiveRef.current = activeSection
+  }, [activeSection])
+
+  useEffect(() => {
+    if (!indicatorRef.current || !initialized.current) return
+
+    const updateIndicator = () => {
+      const activeItem = navItemsRef.current.get(activeSection)
+      if (activeItem) {
+        const rect = activeItem.getBoundingClientRect()
+        const parentRect = activeItem.parentElement?.getBoundingClientRect()
+        if (parentRect) {
+          const left = rect.left - parentRect.left + rect.width / 2 - 24
+          gsap.to(indicatorRef.current, {
+            left,
+            width: 48,
+            duration: 0.4,
+            ease: 'power2.out',
+          })
+        }
+      }
+    }
+
+    updateIndicator()
   }, [activeSection])
 
   const scrollTo = (id: string) => {
     closeMenu()
-    const el = document.getElementById(id)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
+    forceLoadSection(id)
+    
+    const scrollToTarget = () => {
+      const el = document.getElementById(id)
+      if (el) {
+        const headerHeight = 72
+        const elementPosition = el.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - headerHeight
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        })
+      }
     }
+    
+    setTimeout(scrollToTarget, 150)
+    setTimeout(scrollToTarget, 300)
+    setTimeout(scrollToTarget, 500)
   }
 
   return (
@@ -67,38 +104,64 @@ export function Navbar() {
           ChemFolio
         </button>
 
-        <div className="hidden md:flex items-center gap-1 relative">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              ref={(el) => {
-                if (el) navItemsRef.current.set(item.id, el)
-              }}
-              onClick={() => scrollTo(item.id)}
-              className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 cursor-pointer z-10
-                ${activeSection === item.id
-                  ? 'text-[var(--color-accent-cyan)]'
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                }`}
-            >
-              {item.label}
-            </button>
-          ))}
-          <div
-            ref={indicatorRef}
-            className="absolute bottom-2 h-0.5 w-12 bg-[var(--color-accent-cyan)] rounded-full
-              shadow-[0_0_8px_var(--color-accent-cyan)]"
-            style={{ left: '24px' }}
-          />
+        <div className="hidden md:flex items-center gap-4">
+          <div className="relative flex items-center gap-2">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                ref={(el) => {
+                  if (el) navItemsRef.current.set(item.id, el)
+                }}
+                onClick={() => scrollTo(item.id)}
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 cursor-pointer z-10
+                  ${activeSection === item.id
+                    ? 'text-[var(--color-accent-cyan)]'
+                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                  }`}
+              >
+                {item.label}
+              </button>
+            ))}
+            <div
+              ref={indicatorRef}
+              className="absolute bottom-2 h-0.5 bg-[var(--color-accent-cyan)] rounded-full
+                shadow-[0_0_8px_var(--color-accent-cyan)]"
+              style={{ left: '0px', width: '40px' }}
+            />
+          </div>
+          <button
+            onClick={toggleTheme}
+            className="p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-accent-cyan)] transition-all duration-300 cursor-pointer hover:scale-110 rounded-lg hover:bg-white/[0.03]"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
+          </button>
         </div>
 
-        <button
-          onClick={toggleMenu}
-          className="md:hidden p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-accent-cyan)] transition-colors cursor-pointer"
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="flex md:hidden items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            className="p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-accent-cyan)] transition-all duration-300 cursor-pointer hover:scale-110 rounded-lg hover:bg-white/[0.03]"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
+          </button>
+          <button
+            onClick={toggleMenu}
+            className="p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-accent-cyan)] transition-colors cursor-pointer"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {isMenuOpen && (

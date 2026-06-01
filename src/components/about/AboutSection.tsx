@@ -15,7 +15,7 @@ export function AboutSection() {
       <div className="section-container">
         <SectionTitle
           title="关于我"
-          subtitle="从分子结构到生命奥秘，我始终保持着对化学世界的好奇与探索"
+          subtitle="从分子结构到数据分析，我始终保持着对化学世界的好奇与探索"
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-20">

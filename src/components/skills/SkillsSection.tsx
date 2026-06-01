@@ -27,7 +27,7 @@ export function SkillsSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8" ref={containerRef}>
-          {profile.skills.map((category, catIdx) => (
+          {profile.skills.map((category) => (
             <div key={category.category}>
               <div className="glass-panel p-6 h-full">
                 <h3 className="text-lg font-bold font-[family-name:var(--font-display)] text-gradient-cyan mb-6">

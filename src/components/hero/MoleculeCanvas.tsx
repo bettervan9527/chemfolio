@@ -10,7 +10,7 @@ interface Atom {
   connections: number[]
 }
 
-const ATOM_COLORS = ['#00e5ff', '#ff6d00', '#7c3aed', '#10b981', '#f59e0b']
+const ATOM_COLORS = ['#00e5ff', '#00e5ff', '#00e5ff', '#ff6d00', '#7c3aed', '#10b981', '#f59e0b']
 
 export function MoleculeCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -46,8 +46,8 @@ export function MoleculeCanvas() {
         const atom: Atom = {
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
           radius: Math.random() * 2.5 + 1.5,
           color: ATOM_COLORS[Math.floor(Math.random() * ATOM_COLORS.length)],
           connections: [],
@@ -64,13 +64,13 @@ export function MoleculeCanvas() {
           const dx = atom.x - other.x
           const dy = atom.y - other.y
           const dist = dx * dx + dy * dy
-          if (dist < 25600) {
+          if (dist < 32400) {
             nearby.push({ index: j, dist })
           }
         }
 
         nearby.sort((a, b) => a.dist - b.dist)
-        const maxConn = Math.min(3, nearby.length)
+        const maxConn = Math.min(2, nearby.length)
         for (let k = 0; k < maxConn; k++) {
           atom.connections.push(nearby[k].index)
         }
@@ -96,14 +96,14 @@ export function MoleculeCanvas() {
         const mdx = mouseX - atom.x
         const mdy = mouseY - atom.y
         const mdist = Math.sqrt(mdx * mdx + mdy * mdy)
-        if (mdist < 200 && mdist > 0) {
-          const force = 0.02 / (mdist * 0.1)
+        if (mdist < 180 && mdist > 0) {
+          const force = 0.015 / (mdist * 0.1)
           atom.vx -= (mdx / mdist) * force
           atom.vy -= (mdy / mdist) * force
         }
 
-        atom.vx *= 0.999
-        atom.vy *= 0.999
+        atom.vx *= 0.995
+        atom.vy *= 0.995
       }
 
       for (let i = 0; i < atoms.length; i++) {
@@ -120,24 +120,38 @@ export function MoleculeCanvas() {
             ctx.beginPath()
             ctx.moveTo(atom.x, atom.y)
             ctx.lineTo(other.x, other.y)
-            ctx.strokeStyle = `rgba(0, 229, 255, ${alpha * 0.12})`
-            ctx.lineWidth = 0.5
+            ctx.strokeStyle = `rgba(0, 229, 255, ${alpha * 0.25})`
+            ctx.lineWidth = 0.8
             ctx.stroke()
           }
         }
       }
 
       for (const atom of atoms) {
+        const gradient = ctx.createRadialGradient(
+          atom.x, atom.y, 0,
+          atom.x, atom.y, atom.radius * 4
+        )
+        gradient.addColorStop(0, atom.color)
+        gradient.addColorStop(0.3, `${atom.color}80`)
+        gradient.addColorStop(0.6, `${atom.color}30`)
+        gradient.addColorStop(1, 'transparent')
+
         ctx.beginPath()
-        ctx.arc(atom.x, atom.y, atom.radius, 0, Math.PI * 2)
-        ctx.fillStyle = atom.color
-        ctx.globalAlpha = 0.5
+        ctx.arc(atom.x, atom.y, atom.radius * 4, 0, Math.PI * 2)
+        ctx.fillStyle = gradient
         ctx.fill()
 
         ctx.beginPath()
-        ctx.arc(atom.x, atom.y, atom.radius * 1.8, 0, Math.PI * 2)
+        ctx.arc(atom.x, atom.y, atom.radius * 1.5, 0, Math.PI * 2)
         ctx.fillStyle = atom.color
-        ctx.globalAlpha = 0.08
+        ctx.globalAlpha = 0.6
+        ctx.fill()
+
+        ctx.beginPath()
+        ctx.arc(atom.x, atom.y, atom.radius * 0.6, 0, Math.PI * 2)
+        ctx.fillStyle = '#ffffff'
+        ctx.globalAlpha = 0.9
         ctx.fill()
 
         ctx.globalAlpha = 1
@@ -173,7 +187,7 @@ export function MoleculeCanvas() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.8 }}
+      style={{ opacity: 1 }}
     />
   )
 }

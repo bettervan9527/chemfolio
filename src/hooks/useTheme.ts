@@ -1,29 +1,31 @@
-import { useState, useEffect } from 'react';
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
-type Theme = 'light' | 'dark';
+type Theme = 'dark' | 'light'
+
+interface ThemeState {
+  theme: Theme
+  toggleTheme: () => void
+  setTheme: (theme: Theme) => void
+}
+
+export const useThemeStore = create<ThemeState>()(
+  persist(
+    (set) => ({
+      theme: 'dark',
+      toggleTheme: () => set((state) => ({ 
+        theme: state.theme === 'dark' ? 'light' : 'dark' 
+      })),
+      setTheme: (theme) => set({ theme }),
+    }),
+    {
+      name: 'theme-storage',
+    }
+  )
+)
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) {
-      return savedTheme;
-    }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
-
-  useEffect(() => {
-    document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
-  return {
-    theme,
-    toggleTheme,
-    isDark: theme === 'dark'
-  };
-} 
+  const { theme, toggleTheme, setTheme } = useThemeStore()
+  
+  return { theme, toggleTheme, setTheme }
+}

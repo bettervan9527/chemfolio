@@ -17,16 +17,18 @@ export function useGsapReveal<T extends HTMLElement = HTMLDivElement>(
     ctx.current = gsap.context(() => {
       gsap.fromTo(
         el,
-        { y: 30, opacity: 0 },
+        { y: 20, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.6,
-          ease: 'power2.out',
+          duration: 0.4,
+          ease: 'power3.out',
           scrollTrigger: {
             trigger: el,
-            start: 'top 85%',
+            start: 'top 95%',
             toggleActions: 'play none none none',
+            fastScrollEnd: true,
+            preventOverlaps: true,
           },
           ...options,
         }
@@ -36,6 +38,7 @@ export function useGsapReveal<T extends HTMLElement = HTMLDivElement>(
     return () => {
       ctx.current?.revert()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return ref
@@ -56,17 +59,19 @@ export function useGsapStagger<T extends HTMLElement = HTMLDivElement>(
       const children = el.children
       gsap.fromTo(
         children,
-        { y: 30, opacity: 0 },
+        { y: 20, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.5,
+          duration: 0.35,
           stagger: staggerDelay,
-          ease: 'power2.out',
+          ease: 'power3.out',
           scrollTrigger: {
             trigger: el,
-            start: 'top 85%',
+            start: 'top 95%',
             toggleActions: 'play none none none',
+            fastScrollEnd: true,
+            preventOverlaps: true,
           },
           ...options,
         }
@@ -76,6 +81,7 @@ export function useGsapStagger<T extends HTMLElement = HTMLDivElement>(
     return () => {
       ctx.current?.revert()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return ref
