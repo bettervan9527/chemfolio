@@ -36,16 +36,20 @@ export function Navbar() {
   useEffect(() => {
     if (!indicatorRef.current || initialized.current) return
 
-    const activeItem = navItemsRef.current.get(activeSection)
-    if (activeItem) {
-      const rect = activeItem.getBoundingClientRect()
-      const parentRect = activeItem.parentElement?.getBoundingClientRect()
-      if (parentRect) {
-        const left = rect.left - parentRect.left + rect.width / 2 - 24
-        gsap.set(indicatorRef.current, { left, width: 48 })
-        initialized.current = true
+    const timer = setTimeout(() => {
+      const activeItem = navItemsRef.current.get(activeSection)
+      if (activeItem) {
+        const rect = activeItem.getBoundingClientRect()
+        const parentRect = activeItem.parentElement?.getBoundingClientRect()
+        if (parentRect) {
+          const left = rect.left - parentRect.left + rect.width / 2 - 24
+          gsap.set(indicatorRef.current, { left, width: 48 })
+          initialized.current = true
+        }
       }
-    }
+    }, 100)
+
+    return () => clearTimeout(timer)
   }, [activeSection])
 
   useEffect(() => {

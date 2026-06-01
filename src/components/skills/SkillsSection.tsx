@@ -13,7 +13,7 @@ export function SkillsSection() {
   })
 
   return (
-    <section id="skills" className="relative py-24 md:py-32">
+    <section id="skills" className="relative py-24 md:py-32 section-offscreen">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--color-accent-purple)]/20 to-transparent" />
 
       <div className="section-container">

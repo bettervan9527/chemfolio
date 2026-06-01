@@ -9,7 +9,7 @@ export function AboutSection() {
   const rightPanelRef = useGsapReveal<HTMLDivElement>({ x: 30, delay: 0.2 })
 
   return (
-    <section id="about" className="relative py-24 md:py-32">
+    <section id="about" className="relative py-24 md:py-32 section-offscreen">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--color-accent-cyan)]/20 to-transparent" />
 
       <div className="section-container">

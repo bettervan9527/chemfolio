@@ -12,10 +12,13 @@ interface Atom {
 
 const ATOM_COLORS = ['#00e5ff', '#00e5ff', '#00e5ff', '#ff6d00', '#7c3aed', '#10b981', '#f59e0b']
 
+const isMobile = () => window.innerWidth < 768
+
 export function MoleculeCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const atomsRef = useRef<Atom[]>([])
   const animRef = useRef<number>(0)
+  const startTimerRef = useRef<number>(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -29,6 +32,7 @@ export function MoleculeCanvas() {
     let mouseX = 0
     let mouseY = 0
     let running = false
+    let paused = false
 
     const resize = () => {
       width = window.innerWidth
@@ -39,7 +43,8 @@ export function MoleculeCanvas() {
     }
 
     const initAtoms = () => {
-      const count = Math.max(12, Math.floor((width * height) / 40000))
+      const density = isMobile() ? 80000 : 40000
+      const count = Math.max(8, Math.floor((width * height) / density))
       atomsRef.current = []
 
       for (let i = 0; i < count; i++) {
@@ -78,7 +83,10 @@ export function MoleculeCanvas() {
     }
 
     const animate = () => {
-      if (!ctx) return
+      if (!ctx || paused) {
+        animRef.current = requestAnimationFrame(animate)
+        return
+      }
       ctx.clearRect(0, 0, width, height)
 
       const atoms = atomsRef.current
@@ -165,19 +173,27 @@ export function MoleculeCanvas() {
       mouseY = e.clientY
     }
 
+    const handleVisibility = () => {
+      paused = document.hidden
+    }
+
     resize()
-    const startTimer = setTimeout(() => {
+
+    const startDelay = isMobile() ? 1500 : 800
+    startTimerRef.current = window.setTimeout(() => {
       running = true
       initAtoms()
       animate()
-    }, 200)
+    }, startDelay)
 
+    document.addEventListener('visibilitychange', handleVisibility)
     window.addEventListener('resize', resize)
     window.addEventListener('mousemove', handleMouse)
 
     return () => {
-      clearTimeout(startTimer)
+      clearTimeout(startTimerRef.current)
       cancelAnimationFrame(animRef.current)
+      document.removeEventListener('visibilitychange', handleVisibility)
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', handleMouse)
     }
