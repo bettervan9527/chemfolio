@@ -1,10 +1,13 @@
-import { motion } from 'framer-motion'
+import { useGsapReveal } from '@/hooks/useGsapReveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { EducationTimeline } from './EducationTimeline'
 import { ResearchInterest } from './ResearchInterest'
 import { profile } from '@/data/profile'
 
 export function AboutSection() {
+  const leftPanelRef = useGsapReveal<HTMLDivElement>({ x: -30 })
+  const rightPanelRef = useGsapReveal<HTMLDivElement>({ x: 30, delay: 0.2 })
+
   return (
     <section id="about" className="relative py-24 md:py-32">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--color-accent-cyan)]/20 to-transparent" />
@@ -16,11 +19,8 @@ export function AboutSection() {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-20">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6 }}
+          <div
+            ref={leftPanelRef}
             className="lg:col-span-2"
           >
             <div className="glass-panel p-8 h-full">
@@ -31,20 +31,17 @@ export function AboutSection() {
                 {profile.about}
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <div
+            ref={rightPanelRef}
             className="lg:col-span-3"
           >
             <h3 className="text-xl font-bold font-[family-name:var(--font-display)] text-gradient-cyan mb-8">
               教育经历
             </h3>
             <EducationTimeline education={profile.education} />
-          </motion.div>
+          </div>
         </div>
 
         <div>

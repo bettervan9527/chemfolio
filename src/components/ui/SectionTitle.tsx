@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { useGsapReveal } from '@/hooks/useGsapReveal'
 
 interface SectionTitleProps {
   title: string
@@ -7,12 +7,11 @@ interface SectionTitleProps {
 }
 
 export function SectionTitle({ title, subtitle, align = 'center' }: SectionTitleProps) {
+  const ref = useGsapReveal()
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6 }}
+    <div
+      ref={ref}
       className={`mb-16 ${align === 'center' ? 'text-center' : 'text-left'}`}
     >
       <div className="flex items-center gap-4 mb-4 justify-center">
@@ -25,6 +24,6 @@ export function SectionTitle({ title, subtitle, align = 'center' }: SectionTitle
       <p className="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto">
         {subtitle}
       </p>
-    </motion.div>
+    </div>
   )
 }

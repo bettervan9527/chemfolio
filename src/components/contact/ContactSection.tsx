@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { useGsapReveal } from '@/hooks/useGsapReveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { SocialLinks } from './SocialLinks'
 import { profile } from '@/data/profile'
@@ -9,6 +9,8 @@ export function ContactSection() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
+  const formRef = useGsapReveal<HTMLDivElement>()
+  const infoRef = useGsapReveal<HTMLDivElement>()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,12 +30,7 @@ export function ContactSection() {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.5 }}
-          >
+          <div ref={formRef}>
             <h3 className="text-lg font-bold font-[family-name:var(--font-display)] text-gradient-cyan mb-6">
               发送消息
             </h3>
@@ -90,14 +87,9 @@ export function ContactSection() {
                 发送消息
               </button>
             </form>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
+          <div ref={infoRef}>
             <h3 className="text-lg font-bold font-[family-name:var(--font-display)] text-gradient-cyan mb-6">
               联系信息
             </h3>
@@ -142,7 +134,7 @@ export function ContactSection() {
               学术社交
             </h3>
             <SocialLinks social={profile.social} />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

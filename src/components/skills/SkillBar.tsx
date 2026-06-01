@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { useGsapReveal } from '@/hooks/useGsapReveal'
 import type { Skill } from '@/types'
 
 function levelLabel(level: number): string {
@@ -14,12 +14,11 @@ interface SkillBarProps {
 }
 
 export function SkillBar({ skill, index, inView }: SkillBarProps) {
+  const ref = useGsapReveal<HTMLDivElement>({ delay: index * 0.08 })
+
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.3, delay: index * 0.08 }}
+    <div
+      ref={ref}
       className="space-y-2"
     >
       <div className="flex items-center justify-between">
@@ -32,6 +31,6 @@ export function SkillBar({ skill, index, inView }: SkillBarProps) {
           style={{ width: inView ? `${skill.level}%` : '0%' }}
         />
       </div>
-    </motion.div>
+    </div>
   )
 }

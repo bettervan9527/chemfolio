@@ -1,7 +1,8 @@
 import { Menu, X } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
 import { useScrollSpy } from '@/hooks/useScrollSpy'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
 
 const NAV_ITEMS = [
   { id: 'hero', label: '首页' },
@@ -14,6 +15,9 @@ const NAV_ITEMS = [
 export function Navbar() {
   const { activeSection, isMenuOpen, toggleMenu, closeMenu } = useAppStore()
   useScrollSpy()
+  const navItemsRef = useRef<Map<string, HTMLElement>>(new Map())
+  const indicatorRef = useRef<HTMLDivElement>(null)
+  const prevActiveRef = useRef<string>('hero')
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -25,6 +29,25 @@ export function Navbar() {
       document.body.style.overflow = ''
     }
   }, [isMenuOpen])
+
+  useEffect(() => {
+    if (!indicatorRef.current) return
+
+    const activeItem = navItemsRef.current.get(activeSection)
+    if (activeItem) {
+      const rect = activeItem.getBoundingClientRect()
+      const parentRect = activeItem.parentElement?.getBoundingClientRect()
+      if (parentRect) {
+        const left = rect.left - parentRect.left + rect.width / 2 - 24
+        gsap.to(indicatorRef.current, {
+          left,
+          duration: 0.4,
+          ease: 'power2.out',
+        })
+      }
+    }
+    prevActiveRef.current = activeSection
+  }, [activeSection])
 
   const scrollTo = (id: string) => {
     closeMenu()
@@ -44,24 +67,29 @@ export function Navbar() {
           ChemFolio
         </button>
 
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden md:flex items-center gap-1 relative">
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
+              ref={(el) => {
+                if (el) navItemsRef.current.set(item.id, el)
+              }}
               onClick={() => scrollTo(item.id)}
-              className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 cursor-pointer
+              className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 cursor-pointer z-10
                 ${activeSection === item.id
                   ? 'text-[var(--color-accent-cyan)]'
                   : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
                 }`}
             >
               {item.label}
-              {activeSection === item.id && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[var(--color-accent-cyan)] rounded-full
-                  shadow-[0_0_8px_var(--color-accent-cyan)]" />
-              )}
             </button>
           ))}
+          <div
+            ref={indicatorRef}
+            className="absolute bottom-2 h-0.5 w-12 bg-[var(--color-accent-cyan)] rounded-full
+              shadow-[0_0_8px_var(--color-accent-cyan)]"
+            style={{ left: '24px' }}
+          />
         </div>
 
         <button

@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { useGsapStagger } from '@/hooks/useGsapReveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { SkillCloud } from './SkillCloud'
 import { SkillBar } from './SkillBar'
@@ -7,7 +7,10 @@ import { profile } from '@/data/profile'
 
 export function SkillsSection() {
   const [inView, setInView] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+
+  const containerRef = useGsapStagger<HTMLDivElement>(0.15, {
+    onComplete: () => setInView(true),
+  })
 
   return (
     <section id="skills" className="relative py-24 md:py-32">
@@ -23,18 +26,9 @@ export function SkillsSection() {
           <SkillCloud categories={profile.skills} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8" ref={ref}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8" ref={containerRef}>
           {profile.skills.map((category, catIdx) => (
-            <motion.div
-              key={category.category}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.5, delay: catIdx * 0.15 }}
-              onAnimationComplete={() => {
-                if (catIdx === profile.skills.length - 1) setInView(true)
-              }}
-            >
+            <div key={category.category}>
               <div className="glass-panel p-6 h-full">
                 <h3 className="text-lg font-bold font-[family-name:var(--font-display)] text-gradient-cyan mb-6">
                   {category.category}
@@ -45,7 +39,7 @@ export function SkillsSection() {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

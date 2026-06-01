@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { useGsapReveal } from '@/hooks/useGsapReveal'
 import { GraduationCap } from 'lucide-react'
 import type { Education } from '@/types'
 
@@ -13,12 +13,9 @@ export function EducationTimeline({ education }: EducationTimelineProps) {
 
       <div className="space-y-10">
         {education.map((edu, index) => (
-          <motion.div
+          <div
             key={edu.period}
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.5, delay: index * 0.15 }}
+            ref={useGsapReveal({ delay: index * 0.15 })}
             className="relative pl-12 md:pl-16"
           >
             <div className="absolute left-0 md:left-4 top-1 w-8 h-8 -translate-x-1/2 rounded-full glass-panel glow-border
@@ -44,7 +41,7 @@ export function EducationTimeline({ education }: EducationTimelineProps) {
                 </p>
               )}
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>

@@ -1,9 +1,61 @@
-import { motion } from 'framer-motion'
+import { gsap } from 'gsap'
+import { useEffect, useRef } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { MoleculeCanvas } from './MoleculeCanvas'
 import { profile } from '@/data/profile'
 
 export function HeroSection() {
+  const labelRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const subtitleRef = useRef<HTMLParagraphElement>(null)
+  const descriptionRef = useRef<HTMLParagraphElement>(null)
+  const tagsRef = useRef<HTMLDivElement>(null)
+  const scrollIndicatorRef = useRef<HTMLAnchorElement>(null)
+
+  useEffect(() => {
+    const tl = gsap.timeline()
+
+    tl.to(labelRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'easeOut'
+    })
+    .to(titleRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.15,
+      ease: 'easeOut'
+    }, '-=0.5')
+    .to(subtitleRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.3,
+      ease: 'easeOut'
+    }, '-=0.5')
+    .to(descriptionRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.45,
+      ease: 'easeOut'
+    }, '-=0.5')
+    .to(tagsRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.6,
+      ease: 'easeOut'
+    }, '-=0.5')
+    .to(scrollIndicatorRef.current, {
+      opacity: 1,
+      duration: 0.6,
+      delay: 1.2
+    })
+  }, [])
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <MoleculeCanvas />
@@ -28,10 +80,9 @@ export function HeroSection() {
           </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+        <div
+          ref={labelRef}
+          className="opacity-0 translate-y-[30px]"
         >
           <div className="flex items-center gap-3 mb-4 justify-center">
             <div className="h-px w-12 bg-gradient-to-r from-transparent to-[var(--color-accent-cyan)]/30" />
@@ -40,40 +91,32 @@ export function HeroSection() {
             </span>
             <div className="h-px w-12 bg-gradient-to-l from-transparent to-[var(--color-accent-cyan)]/30" />
           </div>
-        </motion.div>
+        </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.15, ease: 'easeOut' }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold font-[family-name:var(--font-display)] mb-4"
+        <h1
+          ref={titleRef}
+          className="text-5xl md:text-7xl lg:text-8xl font-bold font-[family-name:var(--font-display)] mb-4 opacity-0 translate-y-[30px]"
         >
           <span className="text-gradient-cyan">{profile.name}</span>
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
-          className="text-lg md:text-xl text-[var(--color-text-secondary)] mb-2 font-medium"
+        <p
+          ref={subtitleRef}
+          className="text-lg md:text-xl text-[var(--color-text-secondary)] mb-2 font-medium opacity-0 translate-y-[20px]"
         >
           {profile.title}
-        </motion.p>
+        </p>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.45, ease: 'easeOut' }}
-          className="text-sm md:text-base text-[var(--color-text-muted)] max-w-xl mb-10 leading-relaxed"
+        <p
+          ref={descriptionRef}
+          className="text-sm md:text-base text-[var(--color-text-muted)] max-w-xl mb-10 leading-relaxed opacity-0 translate-y-[20px]"
         >
           {profile.subtitle}
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-wrap gap-3 justify-center mb-12"
+        <div
+          ref={tagsRef}
+          className="flex flex-wrap gap-3 justify-center mb-12 opacity-0 translate-y-[20px]"
         >
           {profile.researchFields.map((field, i) => (
             <span
@@ -85,17 +128,15 @@ export function HeroSection() {
               {field}
             </span>
           ))}
-        </motion.div>
+        </div>
 
-        <motion.a
+        <a
+          ref={scrollIndicatorRef}
           href="#about"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="text-[var(--color-text-muted)] hover:text-[var(--color-accent-cyan)] transition-colors cursor-pointer"
+          className="text-[var(--color-text-muted)] hover:text-[var(--color-accent-cyan)] transition-colors cursor-pointer opacity-0"
         >
           <ChevronDown className="w-6 h-6 animate-bounce" />
-        </motion.a>
+        </a>
       </div>
     </section>
   )

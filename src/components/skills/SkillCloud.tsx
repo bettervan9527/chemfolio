@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import { motion } from 'framer-motion'
+import { useGsapStagger } from '@/hooks/useGsapReveal'
 import {
   Beaker,
   Droplets,
@@ -60,6 +60,7 @@ interface SkillCloudProps {
 
 export function SkillCloud({ categories }: SkillCloudProps) {
   const [activeCategory, setActiveCategory] = useState(categories[0]?.category || '')
+  const staggerRef = useGsapStagger(0.05)
 
   const allSkills = categories
     .find((c) => c.category === activeCategory)
@@ -85,16 +86,12 @@ export function SkillCloud({ categories }: SkillCloudProps) {
         ))}
       </div>
 
-      <div className="flex flex-wrap gap-4 justify-center min-h-[120px] items-start py-4">
+      <div ref={staggerRef} className="flex flex-wrap gap-4 justify-center min-h-[120px] items-start py-4">
         {allSkills.map((skill, index) => {
           const size = 0.8 + (skill.level / maxLevel) * 0.8
           return (
-            <motion.div
+            <div
               key={skill.name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
               className="flex flex-col items-center gap-2 group"
             >
               <div
@@ -119,7 +116,7 @@ export function SkillCloud({ categories }: SkillCloudProps) {
               <span className="text-xs text-[var(--color-text-muted)] group-hover:text-[var(--color-text-secondary)] transition-colors text-center leading-tight max-w-[90px]">
                 {skill.name}
               </span>
-            </motion.div>
+            </div>
           )
         })}
       </div>
